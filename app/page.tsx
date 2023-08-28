@@ -5,10 +5,13 @@ import { useState } from 'react';
 function ReportPage() {
   const [number, setNumber] = useState('');
   const [objectData, setObjectData] = useState(null);
-  
+
+  const backEndURL = "https://adf6-92-26-16-202.ngrok-free.app" // change url here
+  const beRepURL = `/api/getObject?number=${number}`
+
   const fetchReport = () => {
     // Make the API call to your Python backend
-    fetch(`https://43e6-92-26-16-202.ngrok-free.app/api/getObject?number=${number}`, {
+    fetch(backEndURL.concat(beRepURL), {
       method: 'GET',
       credentials: 'include'  // Set credentials to include
     })
