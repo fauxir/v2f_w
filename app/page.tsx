@@ -14,17 +14,21 @@ function ReportPage() {
     fetch(backEndURL.concat(beRepURL), {
       method: "GET",
       credentials: "include", // Set credentials to include
+      headers: {
+        "Content-Type": "application/json", // Set the appropriate content type
+        "Access-Control-Allow-Origin": "https://stupendous-klepon-08e122.netlify.app", // Replace with your front-end origin
+      },
     })
-      .then((response) => response.text())
+      .then((response) => response.json()) // Parse response as JSON
       .then((data) => {
-        console.log("Raw API Response:", data);
-        const parsedData = JSON.parse(data); // Attempt to parse the response
-        setObjectData(parsedData);
+        console.log("Parsed API Response:", data);
+        setObjectData(data);
       })
       .catch((error) => {
         console.log("API Error:", error);
       });
   };
+  
 
   return (
     <div>
