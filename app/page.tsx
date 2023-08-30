@@ -16,7 +16,6 @@ function ReportPage() {
       credentials: "include", // Set credentials to include
       headers: {
         "Content-Type": "application/json", // Set the appropriate content type
-        "Access-Control-Allow-Origin": backEndURL.concat(beRepURL), // Replace with your front-end origin
       },
     })
       .then((response) => response.json()) // Parse response as JSON
