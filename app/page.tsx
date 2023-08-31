@@ -4,7 +4,7 @@ import { useState } from "react";
 
 function ReportPage() {
   const [number, setNumber] = useState("");
-  const [objectData, setObjectData] = useState(null);
+  const [objectData, setObjectData] = useState<any>(null);
 
   const backEndURL = "https://adf6-92-26-16-202.ngrok-free.app"; // change url here
   const beRepURL = `/api/getObject?number=${number}`;
@@ -13,18 +13,29 @@ function ReportPage() {
     // Make the API call to your Python backend
     fetch(backEndURL.concat(beRepURL), {
       method: "GET",
-      credentials: "include", // Set credentials to include
+      credentials: "include",
       headers: {
-        "Content-Type": "application/json", // Set the appropriate content type
+        "Content-Type": "application/json",
       },
     })
-      .then((response) => response.json()) // Parse response as JSON
-      .then((data) => {
-        console.log("Parsed API Response:", data);
-        setObjectData(data);
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        console.log("--->", response)
+        return response.text(); // Read response as text
+      })
+      .then((responseText) => {
+        try {
+          const parsedData = responseText; // Attempt to parse the response
+          console.log("Parsed API Response:", parsedData);
+          setObjectData(parsedData);
+        } catch (error) {
+          console.log("JSON Parse Error:", error);
+        }
       })
       .catch((error) => {
-        console.log("API Error:", error);
+        console.log("Fetch Error:", error);
       });
   };
   
