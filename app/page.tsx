@@ -5,11 +5,13 @@ import { useState } from "react";
 function ReportPage() {
   const [number, setNumber] = useState("");
   const [objectData, setObjectData] = useState<any>(null);
+  const [show, setShow] = useState<number>(0)
 
-  const backEndURL = "https://adf6-92-26-16-202.ngrok-free.app"; // change url here
+  const backEndURL = "https://e677-92-10-228-146.ngrok-free.app"; // change url here
   const beRepURL = `/api/getObject?number=${number}`;
 
   const fetchReport = () => {
+    setShow(0)
     // Make the API call to your Python backend
     fetch(backEndURL.concat(beRepURL), {
       method: "GET",
@@ -22,7 +24,7 @@ function ReportPage() {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        console.log("--->", response)
+        console.log("--->", response.url)
         return response.text(); // Read response as text
       })
       .then((responseText) => {
@@ -37,28 +39,37 @@ function ReportPage() {
       .catch((error) => {
         console.log("Fetch Error:", error);
       });
+      setShow(1)
   };
   
-
+console.log("table", JSON.parse(objectData))
   return (
     <div>
       <h1>Your Report Number</h1>
       <br />
       <input
         type="text"
+        className="border"
         placeholder="Enter 10-digit alphanumeric number"
         value={number}
         onChange={(e) => setNumber(e.target.value)}
       />
-      <button onClick={fetchReport} className="ml-5">Find Your Report</button>
+      <button onClick={fetchReport} className="ml-5 border p-1">Find Your Report</button>
 
       {objectData ? (
         <div>
-          <h2>Object Details</h2>
-          <pre>{JSON.stringify(objectData, null, 2)}</pre>
+          <br />
+          <h2>Report number {number}</h2>
+          <br />
+          {JSON.parse(objectData).map((item: any, index: number) => (
+          <tr key={index} className="border-4">
+            <th className="border"> Input {index+1}</th>
+            <td className="border">{item.Input}</td>
+          </tr>
+        ))}
         </div>
       ) : (
-        <div>
+        show ==1 && <div>
           <br />
           <p>No report found.</p>
         </div>
